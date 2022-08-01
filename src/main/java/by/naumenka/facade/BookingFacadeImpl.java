@@ -9,10 +9,12 @@ import by.naumenka.model.User;
 import by.naumenka.service.EventService;
 import by.naumenka.service.TicketService;
 import by.naumenka.service.UserService;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class BookingFacadeImpl implements BookingFacade {
 
     private final UserService userService;

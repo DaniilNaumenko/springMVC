@@ -6,6 +6,7 @@ import by.naumenka.model.Event;
 import by.naumenka.service.EventService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Comparator;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class EventServiceImpl implements EventService {
 
     private static final Log LOGGER = LogFactory.getLog(EventServiceImpl.class);

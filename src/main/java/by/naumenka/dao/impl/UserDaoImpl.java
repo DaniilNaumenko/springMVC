@@ -3,13 +3,19 @@ package by.naumenka.dao.impl;
 import by.naumenka.dao.UserDao;
 import by.naumenka.model.User;
 import by.naumenka.storage.Storage;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDaoImpl implements UserDao {
 
-    private Storage storage;
+    private final Storage storage;
+
+    public UserDaoImpl(Storage storage) {
+        this.storage = storage;
+    }
 
     @Override
     public User createUser(User user) {
@@ -36,7 +42,4 @@ public class UserDaoImpl implements UserDao {
         return new ArrayList<>(storage.getUsers().values());
     }
 
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
 }

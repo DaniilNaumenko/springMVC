@@ -3,13 +3,19 @@ package by.naumenka.dao.impl;
 import by.naumenka.dao.EventDao;
 import by.naumenka.model.Event;
 import by.naumenka.storage.Storage;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class EventDaoImpl implements EventDao {
 
-    private Storage storage;
+    private final Storage storage;
+
+    public EventDaoImpl(Storage storage) {
+        this.storage = storage;
+    }
 
     @Override
     public Event createEvent(Event event) {
@@ -36,7 +42,4 @@ public class EventDaoImpl implements EventDao {
         return new ArrayList<>(storage.getEvents().values());
     }
 
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
 }
