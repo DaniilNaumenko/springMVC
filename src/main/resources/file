@@ -1,0 +1,12 @@
+User, 1, Name1, Email1,
+User, 2, Name2, Email2,
+User, 3, Name3, Email3,
+Event, 1, Title1, 07-07-2022,
+Event, 2, Title2, 15-06-2022,
+Event, 3, Title3, 14-5-2022,
+Ticket, 1, 1, 1, STANDARD, 24
+Ticket, 2, 1, 1, STANDARD, 22
+Ticket, 3, 2, 2, PREMIUM, 3
+Ticket, 4, 2, 3, PREMIUM, 14
+Ticket, 5, 3, 3, BAR, 16
+Ticket, 6, 3, 3, BAR, 9
