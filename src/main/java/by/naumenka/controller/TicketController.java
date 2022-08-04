@@ -5,6 +5,8 @@ import by.naumenka.model.Event;
 import by.naumenka.model.Ticket;
 import by.naumenka.model.User;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,10 +23,11 @@ public class TicketController {
         this.bookingFacade = bookingFacade;
     }
 
-    @SneakyThrows
     @PostMapping("/new")
-    public Ticket bookTicket(@RequestBody Ticket ticket) {
-        return bookingFacade.bookTicket(ticket.getUserId(), ticket.getEventId(), ticket.getPlace(), ticket.getCategory());
+    public ResponseEntity<HttpStatus> bookTicket(@RequestBody Ticket ticket) {
+        bookingFacade.bookTicket(ticket.getUserId(), ticket.getEventId(), ticket.getPlace(), ticket.getCategory());
+
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @GetMapping("/byUser")
@@ -67,6 +70,16 @@ public class TicketController {
         } else {
             modelAndView.addObject("ticketModel", "Error! Ticket wasn't delete by id = " + id);
         }
+        return modelAndView;
+    }
+
+    @GetMapping("/all")
+    public ModelAndView getAll() {
+        ModelAndView modelAndView = new ModelAndView(TEMPLATE);
+
+        List<Ticket> allTickets = bookingFacade.getAllTickets();
+        modelAndView.addObject("ticketModel", allTickets);
+
         return modelAndView;
     }
 }

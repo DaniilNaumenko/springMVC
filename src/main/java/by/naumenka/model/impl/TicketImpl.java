@@ -1,9 +1,13 @@
 package by.naumenka.model.impl;
 
 import by.naumenka.model.Ticket;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class TicketImpl implements Ticket {
 
     private long id;

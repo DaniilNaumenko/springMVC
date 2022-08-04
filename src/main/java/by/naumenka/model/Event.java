@@ -1,10 +1,13 @@
 package by.naumenka.model;
 
-import java.util.Date;
+import by.naumenka.model.impl.EventImpl;
 
+import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 /**
  * Created by maksym_govorischev.
  */
+@JsonDeserialize(as = EventImpl.class)
 public interface Event {
     /**
      * Event id. UNIQUE.

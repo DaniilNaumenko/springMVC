@@ -1,8 +1,12 @@
 package by.naumenka.model;
 
+import by.naumenka.model.impl.TicketImpl;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 /**
  * Created by maksym_govorischev.
  */
+@JsonDeserialize(as = TicketImpl.class)
 public interface Ticket {
     public enum Category {STANDARD, PREMIUM, BAR}
 

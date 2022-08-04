@@ -43,7 +43,7 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public Event createEvent(Event event) throws EventNotFoundException {
+    public Event createEvent(Event event){
         return eventService.createEvent(event);
     }
 
@@ -73,7 +73,7 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public User createUser(User user) throws UserNotFoundException  {
+    public User createUser(User user){
         return userService.createUser(user);
     }
 
@@ -88,7 +88,7 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) throws TicketNotFoundException {
+    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
         return ticketService.bookTicket(userId, eventId, place, category);
     }
 
@@ -105,5 +105,18 @@ public class BookingFacadeImpl implements BookingFacade {
     @Override
     public boolean cancelTicket(long ticketId) {
         return ticketService.cancelTicket(ticketId);
+    }
+
+    @Override
+    public List<Event> getAllEvents() {
+        return eventService.getAllEvents();
+    }
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
+    }
+
+    @Override
+    public List<Ticket> getAllTickets() {
+        return ticketService.getAllTickets();
     }
 }

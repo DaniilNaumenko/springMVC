@@ -51,7 +51,7 @@ public interface BookingFacade {
      * @param event Event file.
      * @return Created Event object.
      */
-    Event createEvent(Event event) throws EventNotFoundException;
+    Event createEvent(Event event);
 
     /**
      * Updates event using given file.
@@ -100,7 +100,7 @@ public interface BookingFacade {
      * @param user User file.
      * @return Created User object.
      */
-    User createUser(User user) throws UserNotFoundException;
+    User createUser(User user);
 
     /**
      * Updates user using given file.
@@ -128,7 +128,7 @@ public interface BookingFacade {
      * @return Booked ticket object.
      * @throws java.lang.IllegalStateException if this place has already been booked.
      */
-    Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) throws TicketNotFoundException;
+    Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category);
 
     /**
      * Get all booked tickets for specified user. Tickets should be sorted by event date in descending order.
@@ -158,4 +158,7 @@ public interface BookingFacade {
      */
     boolean cancelTicket(long ticketId);
 
+    List<Event> getAllEvents();
+    List<User> getAllUsers();
+    List<Ticket> getAllTickets();
 }

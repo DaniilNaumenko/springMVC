@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,23 +52,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) throws UserNotFoundException {
-        LOGGER.info("createUser " + user);
-        Long maxId = userDao.getAllUsers().stream()
-                .max(Comparator.comparing(User::getId))
-                .map(User::getId)
-                .orElseThrow(() -> new UserNotFoundException("There are no users in storage"));
+    public User createUser(User user) {
+        if (isEmailNotUnique(user.getEmail())) {
+            LOGGER.error("Email is not unique");
+            throw new IllegalStateException("User with such email is already present");
+        }
 
-        user.setId(maxId + 1);
-        userDao.createUser(user);
-        return userDao.readUser(user.getId());
+        Optional<Long> maxId = userDao.getAllUsers().stream()
+                .max(Comparator.comparing(User::getId))
+                .map(User::getId);
+
+        if (maxId.isPresent()) {
+            user.setId(maxId.get() + 1L);
+        } else {
+            user.setId(1L);
+        }
+        LOGGER.info("created user:  " + user);
+        return userDao.createUser(user);
+    }
+
+    private boolean isEmailNotUnique(String email) {
+        Optional<User> foundEmail = userDao.getAllUsers().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findAny();
+        return foundEmail.isPresent();
     }
 
     @Override
     public User updateUser(long id, User user) {
         LOGGER.info("updateUser " + user);
-        userDao.updateUser(id, user);
-        return userDao.readUser(user.getId());
+        if (isEmailNotUnique(user.getEmail())) {
+            LOGGER.error("Email is not unique");
+            throw new IllegalStateException("User with such email is already present");
+        }
+        userDao.getAllUsers().stream()
+                .max(Comparator.comparing(User::getId))
+                .map(User::getId)
+                .ifPresent(user::setId);
+
+        return userDao.updateUser(id, user);
     }
 
     @Override
@@ -75,5 +98,9 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("deleteUser " + userId);
         User deletedUser = userDao.deleteUser(userId);
         return deletedUser != null;
+    }
+
+    public List<User> getAllUsers(){
+        return userDao.getAllUsers();
     }
 }

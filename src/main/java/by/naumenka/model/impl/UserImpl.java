@@ -1,9 +1,15 @@
 package by.naumenka.model.impl;
 
 import by.naumenka.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserImpl implements User {
 
+    @JsonIgnoreProperties
     private long id;
     private String name;
     private String email;

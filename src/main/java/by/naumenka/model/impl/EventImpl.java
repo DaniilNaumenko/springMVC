@@ -1,9 +1,13 @@
 package by.naumenka.model.impl;
 
 import by.naumenka.model.Event;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventImpl implements Event {
 
     private long id;

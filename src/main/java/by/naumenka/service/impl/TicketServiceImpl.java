@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,16 +27,18 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) throws TicketNotFoundException {
-        Long maxId = ticketDao.getAllTickets().stream()
+    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
+        Optional<Long> maxId = ticketDao.getAllTickets().stream()
                 .max(Comparator.comparing(Ticket::getId))
-                .map(Ticket::getId)
-                .orElseThrow(() -> new TicketNotFoundException("There are no tickets in storage"));
+                .map(Ticket::getId);
         Ticket ticket = new TicketImpl(eventId, userId, category, place);
-        LOGGER.info("bookTicket" + ticket);
-        ticket.setId(maxId + 1);
-        ticketDao.createTicket(ticket);
-        return ticketDao.readTicket(ticket.getId());
+        if (maxId.isPresent()) {
+            ticket.setId(maxId.get() + 1L);
+        } else {
+            ticket.setId(1L);
+        }
+
+        return ticketDao.createTicket(ticket);
     }
 
     @Override
@@ -67,5 +70,10 @@ public class TicketServiceImpl implements TicketService {
         LOGGER.info("cancelTicket " + ticketId);
         Ticket ticket = ticketDao.deleteTicket(ticketId);
         return ticket != null;
+    }
+
+    @Override
+    public List<Ticket> getAllTickets() {
+        return ticketDao.getAllTickets();
     }
 }

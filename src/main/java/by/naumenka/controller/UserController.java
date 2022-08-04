@@ -3,11 +3,14 @@ package by.naumenka.controller;
 import by.naumenka.facade.BookingFacade;
 import by.naumenka.model.User;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/users")
@@ -20,12 +23,26 @@ public class UserController {
         this.bookingFacade = bookingFacade;
     }
 
-    @GetMapping("/{id}")
+    @PostMapping(value = "/new")
+    public ResponseEntity<HttpStatus> createUser(@RequestBody User user) {
+        bookingFacade.createUser(user);
+
+        return ResponseEntity.ok(HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/update/{id}")
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user, @PathVariable long id) {
+        bookingFacade.updateUser(id, user);
+
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/getById/{id}")
     public ModelAndView getUserById(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
 
         User userById = bookingFacade.getUserById(id);
-        if (userById != null) {
+        if (Objects.nonNull(userById)) {
             modelAndView.addObject("userModel", userById);
         } else {
             modelAndView.addObject("userModel", "user not found with id = " + id);
@@ -34,7 +51,7 @@ public class UserController {
     }
 
     @SneakyThrows
-    @GetMapping("/{email}")
+    @GetMapping("/getByEmail/{email}")
     public ModelAndView getUserByEmail(@PathVariable String email) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
 
@@ -62,18 +79,6 @@ public class UserController {
         return modelAndView;
     }
 
-    @SneakyThrows
-    @PostMapping("/new")
-    public User createUser(@RequestBody User user) {
-        return bookingFacade.createUser(user);
-    }
-
-    @SneakyThrows
-    @PostMapping("/update/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable long id) {
-        return bookingFacade.updateUser(id, user);
-    }
-
     @DeleteMapping("/delete/{id}")
     public ModelAndView deleteUser(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
@@ -84,6 +89,16 @@ public class UserController {
         } else {
             modelAndView.addObject("userModel", "Error! User wasn't delete by id = " + id);
         }
+        return modelAndView;
+    }
+
+    @GetMapping("/all")
+    public ModelAndView getAll() {
+        ModelAndView modelAndView = new ModelAndView(TEMPLATE);
+
+        List<User> allUsers = bookingFacade.getAllUsers();
+        modelAndView.addObject("userModel", allUsers);
+
         return modelAndView;
     }
 }

@@ -8,10 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,23 +64,29 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event createEvent(Event event) throws EventNotFoundException {
-        LOGGER.info("createEvent " + event);
-        Long maxId = eventDao.getAllEvents().stream()
+    public Event createEvent(Event event)  {
+        Optional<Long> maxId = eventDao.getAllEvents().stream()
                 .max(Comparator.comparing(Event::getId))
-                .map(Event::getId)
-                .orElseThrow(() -> new EventNotFoundException("There are no events in storage"));
+                .map(Event::getId);
 
-        event.setId(maxId + 1);
-        eventDao.createEvent(event);
-        return eventDao.readEvent(event.getId());
+        if (maxId.isPresent()) {
+            event.setId(maxId.get() + 1L);
+        } else {
+            event.setId(1L);
+        }
+        LOGGER.info("created event " + event);
+        return eventDao.createEvent(event);
     }
 
     @Override
     public Event updateEvent(long id, Event event) {
         LOGGER.info("updateEvent " + event);
-        eventDao.updateEvent(id, event);
-        return eventDao.readEvent(id);
+        eventDao.getAllEvents().stream()
+                .max(Comparator.comparing(Event::getId))
+                .map(Event::getId)
+                .ifPresent(event::setId);
+
+        return eventDao.updateEvent(id, event);
     }
 
     @Override
@@ -91,5 +94,10 @@ public class EventServiceImpl implements EventService {
         LOGGER.info("deleteEvent " + eventId);
         Event event = eventDao.deleteEvent(eventId);
         return event != null;
+    }
+
+    @Override
+    public List<Event> getAllEvents() {
+        return eventDao.getAllEvents();
     }
 }

@@ -6,6 +6,7 @@ import by.naumenka.model.User;
 import by.naumenka.model.impl.EventImpl;
 import by.naumenka.model.impl.TicketImpl;
 import by.naumenka.model.impl.UserImpl;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class Storage {
 
     private final Map<Long, User> users;

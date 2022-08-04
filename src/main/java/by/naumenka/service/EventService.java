@@ -14,9 +14,11 @@ public interface EventService {
 
     List<Event> getEventsForDay(Date day, int pageSize, int pageNum);
 
-    Event createEvent(Event event)  throws EventNotFoundException;
+    Event createEvent(Event event);
 
     Event updateEvent(long id,Event event);
 
     boolean deleteEvent(long eventId);
+
+    List<Event> getAllEvents();
 }
