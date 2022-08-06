@@ -159,6 +159,10 @@ public interface BookingFacade {
     boolean cancelTicket(long ticketId);
 
     List<Event> getAllEvents();
+
     List<User> getAllUsers();
+
     List<Ticket> getAllTickets();
+
+    void preloadTickets();
 }

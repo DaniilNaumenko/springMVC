@@ -7,23 +7,36 @@ import by.naumenka.model.Ticket;
 import by.naumenka.model.User;
 import by.naumenka.model.impl.TicketImpl;
 import by.naumenka.service.TicketService;
+import by.naumenka.service.xml.TicketXml;
+import by.naumenka.service.xml.XmlToObjectConverter;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TicketServiceImpl implements TicketService {
 
     private static final Log LOGGER = LogFactory.getLog(TicketServiceImpl.class);
     private final TicketDao ticketDao;
+    private final XmlToObjectConverter converter;
 
-    public TicketServiceImpl(TicketDao ticketDao) {
+    public TicketServiceImpl(TicketDao ticketDao, XmlToObjectConverter converter) {
         this.ticketDao = ticketDao;
+        this.converter = converter;
+    }
+
+    @PostConstruct
+    public void init(){
+        preloadTickets();
     }
 
     @Override
@@ -75,5 +88,20 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Ticket> getAllTickets() {
         return ticketDao.getAllTickets();
+    }
+
+    @SneakyThrows
+    @Override
+    public void preloadTickets() {
+        List<TicketXml> ticketsXml = converter.unmarshallXML();
+
+        log.info("tickets loaded from xml: " + ticketsXml.toString());
+        System.out.println(ticketsXml);
+
+        ticketsXml.forEach(ticket -> bookTicket(
+                ticket.getUserId(),
+                ticket.getEventId(),
+                ticket.getPlace(),
+                ticket.getCategory()));
     }
 }

@@ -1,10 +1,15 @@
 package by.naumenka.config;
 
+import by.naumenka.service.xml.TicketXml;
+import by.naumenka.service.xml.TicketsListXml;
+import by.naumenka.service.xml.XmlToObjectConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,6 +20,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 @ComponentScan("by.naumenka")
+@PropertySource("classpath:application.properties")
 @EnableWebMvc
 public class WebConfiguration implements WebMvcConfigurer {
 
@@ -56,5 +62,23 @@ public class WebConfiguration implements WebMvcConfigurer {
         viewResolver.setOrder(2);
         viewResolver.setBasename("views");
         return viewResolver;
+    }
+
+    @Bean
+    public Jaxb2Marshaller jaxb2Marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        marshaller.setClassesToBeBound(
+                TicketXml.class,
+                TicketsListXml.class);
+
+        return marshaller;
+    }
+
+    @Bean
+    public XmlToObjectConverter xmlToObjectConverter() {
+        XmlToObjectConverter xmlToObjectConverter = new XmlToObjectConverter();
+        xmlToObjectConverter.setMarshaller(jaxb2Marshaller());
+
+        return xmlToObjectConverter;
     }
 }
