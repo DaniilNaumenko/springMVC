@@ -1,9 +1,11 @@
 package by.naumenka.service.impl;
 
 import by.naumenka.dao.UserDao;
+import by.naumenka.exception.GlobalApplicationException;
 import by.naumenka.exception.UserNotFoundException;
 import by.naumenka.model.User;
 import by.naumenka.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Log LOGGER = LogFactory.getLog(UserServiceImpl.class);
     private final UserDao userDao;
 
     public UserServiceImpl(UserDao userDao) {
@@ -25,13 +27,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(long userId) {
-        LOGGER.info("getUserById " + userId);
-        return userDao.readUser(userId);
+        log.info("getUserById " + userId);
+        return userDao.getAllUsers()
+                .stream()
+                .filter(user -> user.getId() == userId)
+                .findFirst()
+                .orElseThrow(() -> new UserNotFoundException("User not found by id " + userId));
     }
 
     @Override
-    public User getUserByEmail(String email) throws UserNotFoundException {
-        LOGGER.info("getUserByEmail " + email);
+    public User getUserByEmail(String email) {
+        log.info("getUserByEmail " + email);
         return userDao.getAllUsers()
                 .stream()
                 .filter(user -> user.getEmail().equals(email))
@@ -41,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersByName(String name, int pageSize, int pageNum) {
-        LOGGER.info("getUsersByName " + name);
+        log.info("getUsersByName " + name);
         return userDao.getAllUsers()
                 .stream()
                 .filter(user -> user.getName().equals(name))
@@ -54,8 +60,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         if (isEmailNotUnique(user.getEmail())) {
-            LOGGER.error("Email is not unique");
-            throw new IllegalStateException("User with such email is already present");
+            log.error("Email is not unique");
+            throw new GlobalApplicationException("User with such email is already present");
         }
 
         Optional<Long> maxId = userDao.getAllUsers().stream()
@@ -67,7 +73,7 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setId(1L);
         }
-        LOGGER.info("created user:  " + user);
+        log.info("created user:  " + user);
         return userDao.createUser(user);
     }
 
@@ -80,10 +86,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(long id, User user) {
-        LOGGER.info("updateUser " + user);
+        log.info("updateUser " + user);
         if (isEmailNotUnique(user.getEmail())) {
-            LOGGER.error("Email is not unique");
-            throw new IllegalStateException("User with such email is already present");
+            log.error("Email is not unique");
+            throw new GlobalApplicationException("User with such email is already present");
         }
         userDao.getAllUsers().stream()
                 .max(Comparator.comparing(User::getId))
@@ -95,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(long userId) {
-        LOGGER.info("deleteUser " + userId);
+        log.info("deleteUser " + userId);
         User deletedUser = userDao.deleteUser(userId);
         return deletedUser != null;
     }

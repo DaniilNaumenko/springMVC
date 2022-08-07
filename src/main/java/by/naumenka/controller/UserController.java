@@ -40,27 +40,14 @@ public class UserController {
     @GetMapping("/getById/{id}")
     public ModelAndView getUserById(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
-
-        User userById = bookingFacade.getUserById(id);
-        if (Objects.nonNull(userById)) {
-            modelAndView.addObject("userModel", userById);
-        } else {
-            modelAndView.addObject("userModel", "user not found with id = " + id);
-        }
+        modelAndView.addObject("userModel", bookingFacade.getUserById(id));
         return modelAndView;
     }
 
-    @SneakyThrows
     @GetMapping("/getByEmail/{email}")
     public ModelAndView getUserByEmail(@PathVariable String email) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
-
-        User userByEmail = bookingFacade.getUserByEmail(email);
-        if (userByEmail != null) {
-            modelAndView.addObject("userModel", userByEmail);
-        } else {
-            modelAndView.addObject("userModel", "User not found with email = " + email);
-        }
+        modelAndView.addObject("userModel", bookingFacade.getUserByEmail(email));
         return modelAndView;
     }
 

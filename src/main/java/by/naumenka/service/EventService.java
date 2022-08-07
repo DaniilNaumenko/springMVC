@@ -1,6 +1,5 @@
 package by.naumenka.service;
 
-import by.naumenka.exception.EventNotFoundException;
 import by.naumenka.model.Event;
 
 import java.util.Date;

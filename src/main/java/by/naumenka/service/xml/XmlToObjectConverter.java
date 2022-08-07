@@ -1,5 +1,6 @@
 package by.naumenka.service.xml;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.xml.transform.stream.StreamSource;
@@ -10,7 +11,8 @@ import java.util.List;
 public class XmlToObjectConverter {
 
     private Jaxb2Marshaller marshaller;
-    private static final String FILE_NAME = "C:\\JavaGlobal\\springMVC\\src\\main\\resources\\tickets.xml";
+    @Value("${app.tickets}")
+    private String FILE_NAME;
 
     public void setMarshaller(Jaxb2Marshaller marshaller) {
         this.marshaller = marshaller;

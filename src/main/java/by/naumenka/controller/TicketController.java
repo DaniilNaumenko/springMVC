@@ -61,7 +61,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ModelAndView deleteUser(@PathVariable long id) {
+    public ModelAndView deleteTicket(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
 
         boolean isTicketDeleted = bookingFacade.cancelTicket(id);

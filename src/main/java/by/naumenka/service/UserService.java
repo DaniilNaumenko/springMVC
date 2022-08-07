@@ -1,6 +1,5 @@
 package by.naumenka.service;
 
-import by.naumenka.exception.UserNotFoundException;
 import by.naumenka.model.User;
 
 import java.util.List;
@@ -9,7 +8,7 @@ public interface UserService {
 
     User getUserById(long userId);
 
-    User getUserByEmail(String email) throws UserNotFoundException;
+    User getUserByEmail(String email);
 
     List<User> getUsersByName(String name, int pageSize, int pageNum);
 
