@@ -1,7 +1,6 @@
 package by.naumenka.service.impl;
 
 import by.naumenka.dao.TicketDao;
-import by.naumenka.exception.TicketNotFoundException;
 import by.naumenka.model.Event;
 import by.naumenka.model.Ticket;
 import by.naumenka.model.User;
@@ -11,8 +10,6 @@ import by.naumenka.service.xml.TicketXml;
 import by.naumenka.service.xml.XmlToObjectConverter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;

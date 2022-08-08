@@ -4,7 +4,6 @@ import by.naumenka.facade.BookingFacade;
 import by.naumenka.model.Event;
 import by.naumenka.model.Ticket;
 import by.naumenka.model.User;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

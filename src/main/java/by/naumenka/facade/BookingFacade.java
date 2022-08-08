@@ -1,7 +1,5 @@
 package by.naumenka.facade;
 
-import by.naumenka.exception.EventNotFoundException;
-import by.naumenka.exception.TicketNotFoundException;
 import by.naumenka.exception.UserNotFoundException;
 import by.naumenka.model.Event;
 import by.naumenka.model.Ticket;

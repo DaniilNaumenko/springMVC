@@ -1,6 +1,5 @@
 package by.naumenka.service;
 
-import by.naumenka.exception.TicketNotFoundException;
 import  by.naumenka.model.Event;
 import  by.naumenka.model.Ticket;
 import  by.naumenka.model.User;
